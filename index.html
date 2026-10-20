@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compte Rendu — CrossFit Rank</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090f;--card:#0f1420;--card2:#141828;--border:#1e2d4a;
+  --text:#dce8f8;--text-dim:#6a809a;--accent:#00b4d8;--accent2:#0077b6;
+  --green:#22c55e;--yellow:#fbbf24;--red:#ef4444;--purple:#a855f7;
+  --rank-E:#9E9E9E;--rank-D:#4CAF50;--rank-C:#2196F3;--rank-B:#9C27B0;
+  --rank-A:#FF9800;--rank-S:#F44336;--rank-SS:#FFD700;--rank-SSS:#FF6B00;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.6}
+
+/* COVER */
+.cover{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;background:radial-gradient(ellipse at 50% 40%,#0a1a2e 0%,#07090f 70%);position:relative;overflow:hidden}
+.cover::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 60%,#00b4d810,transparent 60%),radial-gradient(circle at 70% 30%,#FFD70008,transparent 50%)}
+.cover-badge{display:inline-flex;align-items:center;gap:6px;background:#00b4d815;border:1px solid #00b4d840;border-radius:20px;padding:5px 16px;font-size:.75rem;color:var(--accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:24px}
+.cover h1{font-size:clamp(2.4rem,8vw,4rem);font-weight:800;letter-spacing:-1px;margin-bottom:12px;background:linear-gradient(135deg,#c8e8ff,#00b4d8,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.cover-sub{font-size:1rem;color:var(--text-dim);max-width:560px;margin:0 auto 32px}
+.cover-meta{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
+.cover-pill{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 16px;font-size:.82rem;color:var(--text-dim)}
+.cover-pill strong{color:var(--text)}
+
+/* NAV */
+.toc{position:sticky;top:0;z-index:50;background:var(--bg)f0;backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.toc::-webkit-scrollbar{display:none}
+.toc a{white-space:nowrap;padding:5px 14px;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--text-dim);text-decoration:none;font-size:.75rem;font-weight:600;letter-spacing:.5px;transition:all .2s}
+.toc a:hover{border-color:var(--accent);color:var(--text)}
+
+/* SECTIONS */
+.section{max-width:900px;margin:0 auto;padding:60px 24px 0;scroll-margin-top:60px}
+.section-badge{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-bottom:10px}
+.section h2{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:800;letter-spacing:-0.5px;margin-bottom:6px}
+.section-desc{color:var(--text-dim);font-size:.92rem;margin-bottom:28px;max-width:600px}
+
+/* FEATURE CARDS */
+.features{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:28px}
+.feat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;transition:border-color .2s}
+.feat-card:hover{border-color:var(--accent2)}
+.feat-icon{font-size:1.8rem;margin-bottom:10px;display:block}
+.feat-title{font-size:.95rem;font-weight:700;margin-bottom:5px}
+.feat-desc{font-size:.8rem;color:var(--text-dim);line-height:1.5}
+
+/* RANK TABLE */
+.rank-table{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:.85rem}
+.rank-table th{background:var(--card2);padding:9px 12px;text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);border-bottom:1px solid var(--border)}
+.rank-table td{padding:10px 12px;border-bottom:1px solid var(--border)55;vertical-align:middle}
+.rank-badge-sm{display:inline-flex;align-items:center;justify-content:center;width:32px;height:24px;border-radius:5px;border:1px solid currentColor;font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:700}
+.pct-bar{height:6px;border-radius:3px;margin-top:4px}
+
+/* TECH STACK */
+.stack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:20px}
+.stack-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px}
+.stack-label{font-size:.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:5px}
+.stack-name{font-size:.95rem;font-weight:700;margin-bottom:4px}
+.stack-desc{font-size:.75rem;color:var(--text-dim)}
+
+/* SECURITY */
+.security-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-bottom:20px}
+.sec-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;display:flex;gap:10px;align-items:flex-start}
+.sec-icon{font-size:1.2rem;flex-shrink:0;margin-top:2px}
+.sec-title{font-size:.85rem;font-weight:700;margin-bottom:3px}
+.sec-desc{font-size:.75rem;color:var(--text-dim);line-height:1.4}
+
+/* FILES */
+.files-grid{display:grid;gap:8px;margin-bottom:20px}
+.file-row{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:12px}
+.file-icon{font-size:1.1rem;flex-shrink:0}
+.file-name{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--accent)}
+.file-desc{font-size:.75rem;color:var(--text-dim);margin-top:2px}
+.file-badge{font-size:.65rem;padding:2px 8px;border-radius:4px;font-weight:600;margin-left:auto;flex-shrink:0}
+.fb-sql{background:#2196F320;color:#2196F3}
+.fb-py{background:#4CAF5020;color:#4CAF50}
+.fb-ts{background:#a855f720;color:#a855f7}
+.fb-yml{background:#FF980020;color:#FF9800}
+.fb-html{background:#F4433620;color:#F44336}
+.fb-dart{background:#00b4d820;color:#00b4d8}
+
+/* MOVEMENTS */
+.mvt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px;margin-bottom:20px}
+.mvt-item{background:var(--card);border:1px solid var(--border);border-radius:7px;padding:8px 12px;font-size:.78rem}
+.mvt-cat{font-size:.62rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:2px}
+.mvt-name{font-weight:600}
+
+/* ADMIN */
+.admin-box{background:linear-gradient(135deg,#1a0a0a,#1a0f0a);border:1px solid var(--red)40;border-radius:14px;padding:20px;margin-bottom:20px}
+.admin-box h3{color:var(--red);font-size:1rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.admin-steps{display:grid;gap:8px}
+.admin-step{display:flex;gap:10px;align-items:flex-start;background:#1f0a0a;border-radius:8px;padding:10px 12px}
+.admin-step-num{width:22px;height:22px;border-radius:50%;background:var(--red)30;color:var(--red);font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.admin-step-text{font-size:.8rem;color:var(--text)}
+.admin-step-text strong{color:var(--yellow)}
+
+/* TIPS */
+.tip-box{display:flex;gap:10px;padding:12px 16px;border-radius:10px;font-size:.83rem;margin-bottom:14px;line-height:1.5}
+.tip-box.info{background:var(--accent)10;border:1px solid var(--accent)30}
+.tip-box.warn{background:var(--yellow)10;border:1px solid var(--yellow)30}
+.tip-box.success{background:var(--green)10;border:1px solid var(--green)30}
+.tip-icon{font-size:1rem;flex-shrink:0;margin-top:1px}
+
+/* FLOW */
+.flow{display:flex;flex-direction:column;gap:0;margin-bottom:20px}
+.flow-step{display:flex;gap:14px;align-items:flex-start}
+.flow-line{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.flow-dot{width:32px;height:32px;border-radius:50%;background:var(--accent2);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0}
+.flow-connector{width:2px;flex:1;min-height:20px;background:var(--border);margin:4px 0}
+.flow-body{padding-bottom:20px;flex:1}
+.flow-title{font-size:.9rem;font-weight:700;margin-bottom:4px}
+.flow-desc{font-size:.78rem;color:var(--text-dim);line-height:1.4}
+
+hr.sep{border:none;border-top:1px solid var(--border);margin:60px 0 0;max-width:900px;margin-left:auto;margin-right:auto}
+.footer{text-align:center;padding:40px 24px 60px;color:var(--text-dim);font-size:.8rem}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-badge">📋 Compte rendu technique</div>
+  <h1>CrossFit Rank</h1>
+  <div class="cover-sub">Documentation complète du fonctionnement de l'application — architecture, fonctionnalités, sécurité et fichiers livrés.</div>
+  <div class="cover-meta">
+    <div class="cover-pill">📅 <strong>17 Oct 2026 — v1.1</strong></div>
+    <div class="cover-pill">🏋️ <strong>28 mouvements</strong></div>
+    <div class="cover-pill">⚔️ <strong>8 rangs</strong></div>
+    <div class="cover-pill">📱 <strong>Mobile-first</strong></div>
+    <div class="cover-pill">🔒 <strong>Admin TOTP</strong></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="toc">
+  <a href="#vision">🎯 Vision</a>
+  <a href="#rangs">⚔️ Rangs</a>
+  <a href="#fonctionnalites">✨ Fonctionnalités</a>
+  <a href="#mouvements">🏋️ Mouvements</a>
+  <a href="#admin">🔐 Admin</a>
+  <a href="#records">🌍 Records auto</a>
+  <a href="#securite">🛡️ Sécurité</a>
+  <a href="#stack">⚙️ Stack technique</a>
+  <a href="#fichiers">📁 Fichiers</a>
+  <a href="#changelog">🔄 Changelog</a>
+</div>
+
+<!-- VISION -->
+<div class="section" id="vision">
+  <div class="section-badge">🎯 Concept</div>
+  <h2>Vision de l'application</h2>
+  <div class="section-desc">CrossFit Rank est une application mobile qui classe les athlètes CrossFit selon leurs records personnels, en les comparant aux meilleurs athlètes mondiaux du CrossFit.</div>
+  <div class="features">
+    <div class="feat-card">
+      <span class="feat-icon">🎮</span>
+      <div class="feat-title">Inspiré de Solo Leveling</div>
+      <div class="feat-desc">Le système de rangs E → SSS reprend l'univers du manhwa Solo Leveling. Chaque athlète progresse comme un "chasseur" qui monte en rang en battant ses records.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">📊</span>
+      <div class="feat-title">Comparaison mondiale</div>
+      <div class="feat-desc">Chaque PR est comparé aux records mondiaux établis par les meilleurs athlètes CrossFit (Mat Fraser, Tia-Clair Toomey, Rich Froning…) pour calculer un score en %.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">🫀</span>
+      <div class="feat-title">Carte musculaire</div>
+      <div class="feat-desc">Un corps humain anatomique interactif (avant + arrière) s'illumine selon ton rang pour chaque groupe musculaire. Clique sur un muscle pour voir tes PRs associés.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">🏆</span>
+      <div class="feat-title">Classement par Box</div>
+      <div class="feat-desc">Filtre le classement par salle de CrossFit. Option de masquer son profil pour apparaître anonyme tout en restant dans les statistiques globales.</div>
+    </div>
+  </div>
+</div>
+
+<!-- RANGS -->
+<div class="section" id="rangs">
+  <div class="section-badge">⚔️ Système de rangs</div>
+  <h2>Les 8 rangs</h2>
+  <div class="section-desc">Le rang est calculé automatiquement en comparant ton PR au record mondial CrossFit du même mouvement. La formule : <strong>(ton PR ÷ record mondial) × 100</strong>. Pour les temps, la formule est inversée.</div>
+  <table class="rank-table">
+    <thead>
+      <tr><th>Rang</th><th>Nom</th><th>Seuil</th><th>Signification</th><th>Couleur</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="rank-badge-sm" style="color:var(--rank-E);border-color:var(--rank-E)">E</span></td>
+        <td>Éveil</td><td>0 – 19%</td>
+        <td>Débutant absolu. Le voyage commence ici.</td>
+        <td><div class="pct-bar" style="width:19%;background:var(--rank-E)"></div></td>
+      </tr>
+      <tr>
+        <td><span class="rank-badge-sm" style="color:var(--rank-D);border-color:var(--rank-D)">D</span></td>
+        <td>Fer</td><td>20 – 34%</td>
+        <td>Les bases sont posées. Entraînement régulier.</td>
+        <td><div class="pct-bar" style="width:34%;background:var(--rank-D)"></div></td>
+      </tr>
+      <tr>
+        <td><span class="rank-badge-sm" style="color:var(--rank-C);border-color:var(--rank-C)">C</span></td>
+        <td>Bronze</td><td>35 – 49%</td>
+        <td>Niveau intermédiaire reconnu dans la box.</td>
+        <td><div class="pct-bar" style="width:49%;background:var(--rank-C)"></div></td>
+      </tr>
+      <tr>
+        <td><span class="rank-badge-sm" style="color:var(--rank-B);border-color:var(--rank-B)">B</span></td>
+        <td>Argent</td><td>50 – 64%</td>
+        <td>Au-dessus de la moyenne mondiale. Athlète sérieux.</td>
+        <td><div class="pct-bar" style="width:64%;background:var(--rank-B)"></div></td>
+      </tr>
+      <tr>
+        <td><span class="rank-badge-sm" style="color:var(--rank-A);border-color:var(--rank-A)">A</span></td>
+        <td>Or</td><td>65 – 79%</td>
+        <td>Athlète élite. Respecté dans chaque box.</td>
+        <td><div class="pct-bar" style="width:79%;background:var(--rank-A)"></div></td>
+      </tr>
+      <tr>
+        <td><span class="rank-badge-sm" style="color:var(--rank-S);border-color:var(--rank-S)">S</span></td>
+        <td>Platine</td><td>80 – 89%</td>
+        <td>Niveau compétition nationale. Potentiel Games.</td>
+        <td><div class="pct-bar" style="width:89%;background:var(--rank-S)"></div></td>
+      </tr>
+      <tr>
+        <td><span class="rank-badge-sm" style="color:var(--rank-SS);border-color:var(--rank-SS)">SS</span></td>
+        <td>Diamant</td><td>90 – 98%</td>
+        <td>Niveau CrossFit Games. Athlète professionnel.</td>
+        <td><div class="pct-bar" style="width:98%;background:var(--rank-SS)"></div></td>
+      </tr>
+      <tr>
+        <td><span class="rank-badge-sm" style="color:var(--rank-SSS);border-color:var(--rank-SSS)">SSS</span></td>
+        <td>Monarque</td><td>99%+</td>
+        <td>Record mondial ou quasi-record. Légendaire.</td>
+        <td><div class="pct-bar" style="width:100%;background:var(--rank-SSS)"></div></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="tip-box info">
+    <span class="tip-icon">💡</span>
+    <span>Le <strong>rang global</strong> est la moyenne de tous les scores % de tes PRs. Un athlète qui entre 5 PRs à 45% chacun obtiendra un rang C global, même si certains mouvements individuels lui donnent un rang B.</span>
+  </div>
+</div>
+
+<!-- FONCTIONNALITÉS -->
+<div class="section" id="fonctionnalites">
+  <div class="section-badge">✨ Pages de l'app</div>
+  <h2>Fonctionnalités détaillées</h2>
+  <div class="section-desc">L'application est organisée en 4 pages accessibles via la navigation en bas de l'écran.</div>
+
+  <div class="features">
+    <div class="feat-card">
+      <span class="feat-icon">🏅</span>
+      <div class="feat-title">Page Rang (accueil)</div>
+      <div class="feat-desc">Badge de rang animé avec couleur dynamique · Score global en % · Barre de progression vers le prochain rang · Échelle des rangs · Stats (PRs, meilleur rang, score moyen) · Saisie des PRs par catégorie</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">🫀</span>
+      <div class="feat-title">Carte musculaire</div>
+      <div class="feat-desc">Corps anatomique SVG détaillé (vue avant + arrière) · 12 groupes musculaires interactifs · Couleur selon le rang du muscle · Clique pour voir tous les PRs qui sollicitent ce muscle · Panel de détail</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">🏆</span>
+      <div class="feat-title">Classement</div>
+      <div class="feat-desc">Classement global ou filtré par box CrossFit · Podium 👑🥈🥉 · Profils masquables (anonyme) · Mise à jour en temps réel · Affiché même pour les profils privés (sans nom ni salle)</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">👤</span>
+      <div class="feat-title">Profil</div>
+      <div class="feat-desc">Pseudo personnalisé · Sélection du genre (H/F) pour les bons records mondiaux · Nom de la box CrossFit · Toggle confidentialité pour masquer le profil dans le classement</div>
+    </div>
+  </div>
+</div>
+
+<!-- MOUVEMENTS -->
+<div class="section" id="mouvements">
+  <div class="section-badge">🏋️ Mouvements</div>
+  <h2>Les 28 mouvements couverts</h2>
+  <div class="section-desc">Chaque mouvement possède un record mondial homme et femme de référence. Les records sont mis à jour automatiquement chaque jour (voir section Records automatiques).</div>
+  <div class="mvt-grid">
+    <div class="mvt-item"><div class="mvt-cat">🏋️ Haltérophilie</div><div class="mvt-name">Snatch</div></div>
+    <div class="mvt-item"><div class="mvt-cat">🏋️ Haltérophilie</div><div class="mvt-name">Clean & Jerk</div></div>
+    <div class="mvt-item"><div class="mvt-cat">🏋️ Haltérophilie</div><div class="mvt-name">Clean</div></div>
+    <div class="mvt-item"><div class="mvt-cat">🏋️ Haltérophilie</div><div class="mvt-name">Overhead Squat</div></div>
+    <div class="mvt-item"><div class="mvt-cat">💪 Force</div><div class="mvt-name">Back Squat</div></div>
+    <div class="mvt-item"><div class="mvt-cat">💪 Force</div><div class="mvt-name">Front Squat</div></div>
+    <div class="mvt-item"><div class="mvt-cat">💪 Force</div><div class="mvt-name">Deadlift</div></div>
+    <div class="mvt-item"><div class="mvt-cat">💪 Force</div><div class="mvt-name">Bench Press</div></div>
+    <div class="mvt-item"><div class="mvt-cat">💪 Force</div><div class="mvt-name">Strict Press</div></div>
+    <div class="mvt-item"><div class="mvt-cat">💪 Force</div><div class="mvt-name">Push Press</div></div>
+    <div class="mvt-item"><div class="mvt-cat">🤸 Gymnastique</div><div class="mvt-name">Pull-ups (max)</div></div>
+    <div class="mvt-item"><div class="mvt-cat">🤸 Gymnastique</div><div class="mvt-name">Muscle-ups (max)</div></div>
+    <div class="mvt-item"><div class="mvt-cat">🤸 Gymnastique</div><div class="mvt-name">HSPU (max)</div></div>
+    <div class="mvt-item"><div class="mvt-cat">🤸 Gymnastique</div><div class="mvt-name">Toes-to-Bar (max)</div></div>
+    <div class="mvt-item"><div class="mvt-cat">🤸 Gymnastique</div><div class="mvt-name">Double-Unders</div></div>
+    <div class="mvt-item"><div class="mvt-cat">🏃 Cardio</div><div class="mvt-name">500m Row</div></div>
+    <div class="mvt-item"><div class="mvt-cat">🏃 Cardio</div><div class="mvt-name">2000m Row</div></div>
+    <div class="mvt-item"><div class="mvt-cat">🏃 Cardio</div><div class="mvt-name">5km Run</div></div>
+    <div class="mvt-item"><div class="mvt-cat">⏱️ WODs</div><div class="mvt-name">Fran</div></div>
+    <div class="mvt-item"><div class="mvt-cat">⏱️ WODs</div><div class="mvt-name">Grace</div></div>
+    <div class="mvt-item"><div class="mvt-cat">⏱️ WODs</div><div class="mvt-name">Cindy (20min)</div></div>
+    <div class="mvt-item"><div class="mvt-cat">⏱️ WODs</div><div class="mvt-name">Murph</div></div>
+    <div class="mvt-item"><div class="mvt-cat">⏱️ WODs</div><div class="mvt-name">Karen (150 WB)</div></div>
+    <div class="mvt-item"><div class="mvt-cat">⏱️ WODs</div><div class="mvt-name">Helen</div></div>
+    <div class="mvt-item"><div class="mvt-cat">⏱️ WODs</div><div class="mvt-name">Annie</div></div>
+    <div class="mvt-item"><div class="mvt-cat">⏱️ WODs</div><div class="mvt-name">Isabel</div></div>
+  </div>
+  <div class="tip-box info">
+    <span class="tip-icon">📐</span>
+    <span>Pour les mouvements en <strong>secondes</strong> (WODs, rowing, run), la formule est inversée : <em>score = (record mondial ÷ ton temps) × 100</em>. Moins tu mets de temps, meilleur est ton score.</span>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div class="section" id="admin">
+  <div class="section-badge">🔐 Administration</div>
+  <h2>Compte Admin caché</h2>
+  <div class="section-desc">L'admin est totalement invisible — il apparaît comme un utilisateur normal dans le classement. Aucun badge, aucun indicateur visible.</div>
+
+  <div class="admin-box">
+    <h3>🔑 Accès au panel admin</h3>
+    <div class="admin-steps">
+      <div class="admin-step">
+        <div class="admin-step-num">1</div>
+        <div class="admin-step-text"><strong>Méthode A — Appui long mobile :</strong> Appuie pendant 3 secondes sur le logo ⚔️ C.RANK en haut de l'écran</div>
+      </div>
+      <div class="admin-step">
+        <div class="admin-step-num">2</div>
+        <div class="admin-step-text"><strong>Méthode B — 5 clics rapides :</strong> Clique 5 fois rapidement sur le logo (en moins de 1,5 seconde)</div>
+      </div>
+      <div class="admin-step">
+        <div class="admin-step-num">3</div>
+        <div class="admin-step-text"><strong>Méthode C — URL cachée :</strong> Ajoute <strong>?admin=open</strong> à la fin de l'URL de l'app</div>
+      </div>
+      <div class="admin-step">
+        <div class="admin-step-num">4</div>
+        <div class="admin-step-text"><strong>Code TOTP :</strong> Entrer le code à 6 chiffres qui change toutes les <strong>60 secondes</strong>. En production, ce code sera généré uniquement par Google Authenticator sur le téléphone de l'admin.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="features">
+    <div class="feat-card">
+      <span class="feat-icon">📊</span>
+      <div class="feat-title">Modifier les records mondiaux</div>
+      <div class="feat-desc">L'admin peut corriger ou mettre à jour les records mondiaux (homme et femme) pour chaque mouvement. La mise à jour recalcule automatiquement le rang de tous les utilisateurs ayant un PR sur ce mouvement.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">⚠️</span>
+      <div class="feat-title">Valider les PRs suspects</div>
+      <div class="feat-desc">Tout PR dont le score dépasse 110% du record mondial est automatiquement signalé comme suspect. L'admin peut valider (conserver) ou rejeter (supprimer) ces PRs depuis le panel.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">👥</span>
+      <div class="feat-title">Gestion des utilisateurs</div>
+      <div class="feat-desc">L'admin peut éditer un profil, envoyer un avertissement, ou bannir définitivement un utilisateur de l'application. L'historique des actions est conservé dans le journal d'audit.</div>
+    </div>
+  </div>
+
+  <div class="tip-box warn">
+    <span class="tip-icon">⚠️</span>
+    <span>Le code TOTP affiché dans la démo est visible pour faciliter les tests. En <strong>version de production</strong>, ce code sera uniquement disponible dans Google Authenticator — jamais affiché dans l'app.</span>
+  </div>
+</div>
+
+<!-- RECORDS AUTO -->
+<div class="section" id="records">
+  <div class="section-badge">🌍 Automatisation</div>
+  <h2>Mise à jour automatique des records</h2>
+  <div class="section-desc">Un système automatique scrape internet chaque jour à 6h UTC pour détecter de nouveaux records mondiaux CrossFit.</div>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-line"><div class="flow-dot">1</div><div class="flow-connector"></div></div>
+      <div class="flow-body">
+        <div class="flow-title">GitHub Actions — Cron 6h UTC</div>
+        <div class="flow-desc">Le script Python se lance automatiquement chaque jour. Peut aussi être déclenché manuellement depuis GitHub.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-line"><div class="flow-dot">2</div><div class="flow-connector"></div></div>
+      <div class="flow-body">
+        <div class="flow-title">Scraping 4 sources indépendantes</div>
+        <div class="flow-desc">CrossFit.com (officiel) · Morning Chalk Up (presse) · DuckDuckGo / WODwell · Claude AI avec web search natif</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-line"><div class="flow-dot">3</div><div class="flow-connector"></div></div>
+      <div class="flow-body">
+        <div class="flow-title">Moteur de consensus Claude AI</div>
+        <div class="flow-desc">Claude analyse les données des 4 sources et calcule un score de confiance (0 à 1). Règles : amélioration max 20%, valeurs réalistes, cohérence entre sources.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-line"><div class="flow-dot">4</div><div class="flow-connector"></div></div>
+      <div class="flow-body">
+        <div class="flow-title">Décision automatique</div>
+        <div class="flow-desc"><strong style="color:var(--green)">Confiance ≥ 0.75</strong> → mise à jour automatique via Edge Function Supabase · <strong style="color:var(--yellow)">Confiance 0.5–0.74</strong> → alerte admin par GitHub Issue · <strong style="color:var(--red)">Confiance &lt; 0.5</strong> → rejeté</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-line"><div class="flow-dot">5</div><div class="flow-connector"></div></div>
+      <div class="flow-body">
+        <div class="flow-title">Recalcul en cascade</div>
+        <div class="flow-desc">Si un nouveau record est validé, tous les PRs des utilisateurs sur ce mouvement sont recalculés. Les rangs baissent si le record mondial augmente.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-line"><div class="flow-dot">6</div></div>
+      <div class="flow-body">
+        <div class="flow-title">Notification push</div>
+        <div class="flow-desc">Chaque utilisateur affecté reçoit une notification : "Nouveau record mondial — ton rang a changé !"</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SÉCURITÉ -->
+<div class="section" id="securite">
+  <div class="section-badge">🛡️ Sécurité</div>
+  <h2>Protections en place</h2>
+  <div class="section-desc">La base de données et l'API sont protégées à plusieurs niveaux pour empêcher toute tentative de triche ou d'injection.</div>
+  <div class="security-grid">
+    <div class="sec-item"><span class="sec-icon">🔒</span><div><div class="sec-title">Row Level Security (RLS)</div><div class="sec-desc">Chaque utilisateur ne peut lire/écrire que ses propres données. Les records mondiaux sont en lecture seule pour tous.</div></div></div>
+    <div class="sec-item"><span class="sec-icon">🧮</span><div><div class="sec-title">Types ENUM stricts</div><div class="sec-desc">genre_type, rank_type, unit_type — impossible d'injecter des valeurs non prévues comme gender="admin".</div></div></div>
+    <div class="sec-item"><span class="sec-icon">🛡️</span><div><div class="sec-title">Anti SQL injection</div><div class="sec-desc">Fonction is_safe_text() bloque les patterns dangereux (UNION, DROP, SELECT, scripts XSS) dans tous les champs texte libres.</div></div></div>
+    <div class="sec-item"><span class="sec-icon">🔐</span><div><div class="sec-title">Champs calculés protégés</div><div class="sec-desc">score_percent et rank_letter sont toujours calculés côté serveur via trigger SECURITY DEFINER. Le client ne peut jamais les modifier.</div></div></div>
+    <div class="sec-item"><span class="sec-icon">📜</span><div><div class="sec-title">Historique immuable</div><div class="sec-desc">La table pr_history est append-only. Des triggers bloquent tout UPDATE ou DELETE — l'historique ne peut pas être falsifié.</div></div></div>
+    <div class="sec-item"><span class="sec-icon">🕐</span><div><div class="sec-title">Rate limiting</div><div class="sec-desc">Maximum 30 insertions de PRs par heure par utilisateur. Bloque les scripts automatisés de spam.</div></div></div>
+    <div class="sec-item"><span class="sec-icon">📋</span><div><div class="sec-title">Journal d'audit</div><div class="sec-desc">Chaque INSERT/UPDATE/DELETE sur les PRs est loggé avec l'ancienne et la nouvelle valeur. Inaccessible depuis le client.</div></div></div>
+    <div class="sec-item"><span class="sec-icon">🔑</span><div><div class="sec-title">Admin TOTP</div><div class="sec-desc">Mot de passe à usage unique basé sur l'horloge (RFC 6238). Change toutes les 60 secondes. Impossible à deviner par force brute.</div></div></div>
+    <div class="sec-item"><span class="sec-icon">🚫</span><div><div class="sec-title">Validation des PRs suspects</div><div class="sec-desc">Tout score > 110% du record mondial est automatiquement signalé. L'admin doit valider manuellement avant publication.</div></div></div>
+  </div>
+</div>
+
+<!-- STACK TECHNIQUE -->
+<div class="section" id="stack">
+  <div class="section-badge">⚙️ Architecture</div>
+  <h2>Stack technique</h2>
+  <div class="section-desc">L'application utilise une stack moderne, entièrement cloud, sans serveur à gérer.</div>
+  <div class="stack-grid">
+    <div class="stack-card"><div class="stack-label">Frontend démo</div><div class="stack-name">HTML / CSS / JS</div><div class="stack-desc">App mobile-first pure, optimisée tactile, sans dépendance externe</div></div>
+    <div class="stack-card"><div class="stack-label">Base de données</div><div class="stack-name">Supabase (PostgreSQL)</div><div class="stack-desc">Tables, triggers, RLS, fonctions SQL, API auto-générée</div></div>
+    <div class="stack-card"><div class="stack-label">Backend serverless</div><div class="stack-name">Supabase Edge Functions</div><div class="stack-desc">TypeScript / Deno — mise à jour des records, recalcul en cascade</div></div>
+    <div class="stack-card"><div class="stack-label">Automation</div><div class="stack-name">GitHub Actions + Python</div><div class="stack-desc">Cron quotidien, scraping, consensus IA, alertes admin</div></div>
+    <div class="stack-card"><div class="stack-label">Intelligence artificielle</div><div class="stack-name">Claude API (Anthropic)</div><div class="stack-desc">Analyse et validation des nouveaux records via web search</div></div>
+    <div class="stack-card"><div class="stack-label">App mobile (prod)</div><div class="stack-name">Flutter / FlutterFlow</div><div class="stack-desc">iOS + Android natif, connecté à Supabase</div></div>
+  </div>
+</div>
+
+<!-- FICHIERS -->
+<div class="section" id="fichiers">
+  <div class="section-badge">📁 Livrables</div>
+  <h2>Tous les fichiers générés</h2>
+  <div class="section-desc">7 fichiers livrés, prêts à l'emploi. Ordre d'utilisation recommandé :</div>
+  <div class="files-grid">
+    <div class="file-row"><span class="file-icon">🗄️</span><div><div class="file-name">supabase_schema.sql</div><div class="file-desc">Schéma complet sécurisé — tables, triggers, RLS, types ENUM, anti-injection, audit log, rate limiting, 28 mouvements pré-remplis</div></div><span class="file-badge fb-sql">SQL · Étape 1</span></div>
+    <div class="file-row"><span class="file-icon">🔄</span><div><div class="file-name">recalcul_ranks.sql</div><div class="file-desc">Fonctions SQL additionnelles — recalcul en cascade, notifications push, historique des records mondiaux, file de révision manuelle</div></div><span class="file-badge fb-sql">SQL · Étape 2</span></div>
+    <div class="file-row"><span class="file-icon">⚙️</span><div><div class="file-name">rank_functions.dart</div><div class="file-desc">8 Custom Functions Dart pour FlutterFlow — calculateScorePercent, getRankFromScore, getRankColor, formatPRValue, convertToSeconds…</div></div><span class="file-badge fb-dart">Dart · Flutter</span></div>
+    <div class="file-row"><span class="file-icon">🤖</span><div><div class="file-name">scraper.py</div><div class="file-desc">Scraper Python — 4 sources indépendantes, moteur de consensus Claude AI, score de confiance, rapport JSON automatique</div></div><span class="file-badge fb-py">Python · Auto</span></div>
+    <div class="file-row"><span class="file-icon">⚡</span><div><div class="file-name">update_records_edge_function.ts</div><div class="file-desc">Supabase Edge Function TypeScript — validation sécurisée des records, mise à jour DB, déclenchement recalcul en cascade</div></div><span class="file-badge fb-ts">TypeScript · Deno</span></div>
+    <div class="file-row"><span class="file-icon">🕐</span><div><div class="file-name">github_actions_workflow.yml</div><div class="file-desc">Workflow GitHub Actions — cron quotidien 6h UTC, lancement manuel, upload rapport, création Issue si révision manuelle requise</div></div><span class="file-badge fb-yml">YAML · CI/CD</span></div>
+    <div class="file-row"><span class="file-icon">📱</span><div><div class="file-name">crossfit_admin.html</div><div class="file-desc">App complète mobile-first — rang, carte musculaire anatomique, classement, profil, admin TOTP caché. Version beta testable.</div></div><span class="file-badge fb-html">HTML · Beta</span></div>
+  </div>
+
+  <div class="tip-box success">
+    <span class="tip-icon">✅</span>
+    <span>Supabase est déjà connecté et les tables sont créées. La beta HTML est fonctionnelle et testable immédiatement sur mobile et desktop.</span>
+  </div>
+</div>
+
+<hr class="sep">
+<div class="footer">
+  CrossFit Rank — Compte rendu technique v1.1 · Généré par Claude (Anthropic) · 17 Octobre 2026<br>
+  <span style="opacity:.5">Tous les fichiers sont disponibles en téléchargement via l'interface de chat.</span>
+</div>
+
+<!-- CHANGELOG -->
+<div class="section" id="changelog" style="padding-bottom:60px">
+  <div class="section-badge">🔄 Historique des modifications</div>
+  <h2>Changelog Beta</h2>
+  <div class="section-desc">Modifications apportées suite aux premiers retours clients.</div>
+
+  <div style="display:grid;gap:12px;margin-bottom:20px">
+
+    <div style="background:var(--card);border:1px solid var(--green)40;border-left:3px solid var(--green);border-radius:12px;padding:16px 18px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <span style="background:var(--green)20;color:var(--green);font-size:.68rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:1px;text-transform:uppercase">v1.1 — 17 Oct 2026</span>
+        <span style="font-size:.75rem;color:var(--text-dim)">Suite aux retours clients</span>
+      </div>
+      <div style="display:grid;gap:8px">
+
+        <div style="display:flex;gap:10px;align-items:flex-start;background:var(--card2);border-radius:8px;padding:10px 12px">
+          <span style="font-size:1rem;flex-shrink:0">🫀</span>
+          <div>
+            <div style="font-size:.88rem;font-weight:700;margin-bottom:3px">Légende musculaire — ordre corrigé</div>
+            <div style="font-size:.78rem;color:var(--text-dim)">La légende s'affiche maintenant en 2 colonnes dans l'ordre croissant E → D → C → B (colonne gauche) et A → S → SS → SSS (colonne droite), correspondant à la progression naturelle des rangs.</div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;align-items:flex-start;background:var(--card2);border-radius:8px;padding:10px 12px">
+          <span style="font-size:1rem;flex-shrink:0">🏆</span>
+          <div>
+            <div style="font-size:.88rem;font-weight:700;margin-bottom:3px">Classement — filtre boxes simplifié</div>
+            <div style="font-size:.78rem;color:var(--text-dim)">Le filtre affiche uniquement "Toutes" et la box de l'utilisateur connecté. Les boxes des autres utilisateurs ne sont plus listées pour éviter la confusion et préserver la confidentialité.</div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;align-items:flex-start;background:var(--card2);border-radius:8px;padding:10px 12px">
+          <span style="font-size:1rem;flex-shrink:0">🔒</span>
+          <div>
+            <div style="font-size:.88rem;font-weight:700;margin-bottom:3px">Profils masqués — exclusion totale du classement</div>
+            <div style="font-size:.78rem;color:var(--text-dim)">Les utilisateurs ayant activé "Masquer mon profil" n'apparaissent plus du tout dans le classement (ni en anonyme, ni sous quelque forme que ce soit). Leur profil reste privé à 100%.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div style="background:var(--card);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:12px;padding:16px 18px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <span style="background:var(--accent)20;color:var(--accent);font-size:.68rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:1px;text-transform:uppercase">v1.0 — 16 Oct 2026</span>
+        <span style="font-size:.75rem;color:var(--text-dim)">Version beta initiale</span>
+      </div>
+      <div style="font-size:.78rem;color:var(--text-dim);line-height:1.6">
+        Première version beta livrée aux clients : app mobile-first complète avec rang global, saisie des 28 mouvements, carte musculaire anatomique SVG, classement par box, profil avec confidentialité, panel admin TOTP caché, corps anatomique détaillé avant + arrière.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
